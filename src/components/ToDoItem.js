@@ -1,37 +1,90 @@
-import React from "react";
-import { Card, Grid, Icon, Image, List, Checkbox, Container } from "semantic-ui-react";
+import React, { useState } from "react";
+import {
+  Grid,
+  Image,
+  List,
+  Checkbox,
+  Container,
+  Modal,
+  Transition,
+} from "semantic-ui-react";
 
-const ToDoItem = ({ item }) => {
+import { useDispatch } from "react-redux";
+import {
+  setCheck,
+  saveCompletedToDo,
+  toDoFinished,
+} from "../features/toDoSlice";
+
+const ToDoItem = (props) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isItemChecked, setIsItemChecked] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleCheck = () => {
+    setIsItemChecked(!isItemChecked);
+    dispatch(setCheck(props.item.id));
+    dispatch(saveCompletedToDo(props.item));
+  };
+
+  const handleToggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
   return (
-    <div className="to-do-container">
-      <Grid.Column>
-        <Container>
-          <Grid.Row centered>
-            <List fluid relaxed animated>
-              <List.Item className="to-do-content-conatiner">
-                <Image
-                  avatar
-                  src="https://react.semantic-ui.com/images/avatar/small/daniel.jpg"
-                />
-                <List.Content className="to-do-content">
-                  <List.Header as="a">Daniel Louise</List.Header>
-                  <List.Description>
-                    Last seen watching{" "}
-                    <a>
-                      <b>Arrested Development</b>
-                    </a>{" "}
-                    just now.
-                  </List.Description>
-                </List.Content>
-                <span style={{ marginLeft: "25px" }}>
-                  <Checkbox />
-                </span>
-              </List.Item>
-            </List>
-          </Grid.Row>
-        </Container>
-      </Grid.Column>
-    </div>
+      <div {...props} className="to-do-container">
+        {/* <Grid.Column>
+          <Container>
+            <Grid.Row centered>
+              <List fluid relaxed animated>
+                <List.Item className="to-do-content-conatiner">
+                  <Image
+                    avatar
+                    src="https://react.semantic-ui.com/images/avatar/small/daniel.jpg"
+                  />
+                  <List.Content
+                    onClick={handleToggleModal}
+                    className="to-do-content"
+                  >
+                    <List.Header as="a">Daniel Louise</List.Header>
+                    <List.Description>
+                      Last seen watching{" "}
+                      <a>
+                        <b>Arrested Development</b>
+                      </a>{" "}
+                      just now.
+                    </List.Description>
+                  </List.Content>
+                  <span style={{ margin: "50px" }}>
+                    <Checkbox checked={isItemChecked} onClick={handleCheck} />
+                  </span>
+                </List.Item>
+              </List>
+            </Grid.Row>
+          </Container>
+          <Modal
+            onClose={() => setIsModalOpen(false)}
+            onOpen={() => setIsModalOpen(true)}
+            open={isModalOpen}
+            header="Reminder!"
+            content="Call Benjamin regarding the reports."
+            actions={[
+              {
+                key: "Snooze",
+                content: "Cancel",
+                onClick: () => setIsModalOpen(false),
+              },
+              {
+                key: "done",
+                content: "Done",
+                positive: true,
+                onClick: () => setIsModalOpen(false),
+              },
+            ]}
+          />
+        </Grid.Column> */}
+        fdafjafd
+      </div>
   );
 };
 

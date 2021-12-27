@@ -20,6 +20,8 @@ import {
   Dropdown,
   Container,
   Button,
+  List,
+  Transition,
   Card,
   Image,
   Icon,
@@ -29,20 +31,17 @@ import { useDispatch } from "react-redux";
 import { saveToDo } from "../features/toDoSlice";
 import ToDoItem from "./ToDoItem";
 
-const TODOS = [
-  { name: "Grociers", id: 6954261 },
-  { name: "Assignmnet", id: 6954262 },
-  { name: "Major WOrk", id: 6954263 },
-  { name: "Hello", id: 6954264 },
-];
+import { useSelector } from "react-redux";
+import { getToDoList } from "../features/toDoSlice";
 
 const ToDoList = () => {
   const [toDoEvent, setToDoEvent] = useState("");
   const dispatch = useDispatch();
+  const [visible,setVisible] = useState(false)
+
+  const toDoList = useSelector(getToDoList);
 
   const addToDo = () => {
-    console.log("TODO");
-    console.log(toDoEvent);
     dispatch(saveToDo({ item: toDoEvent, done: false, id: Date.now() }));
     setToDoEvent("");
   };
@@ -69,12 +68,30 @@ const ToDoList = () => {
                   />
                 </Form>
               </Grid.Row>
-
+              <Grid.Column>
+          {/* <Transition.Group animation={"fly right"} duration={600}>
+            
+              {visible && (<div> thuasFjdanfjkdnfkdanjkfdna kdnkfndskfnsdkafndksfjd</div> )}
+              <Button
+            content={visible ? 'Unmount' : 'Mount'}
+            onClick={() => setVisible(!visible)}
+          />
+          </Transition.Group> */}
+        </Grid.Column>
               <Grid.Column width={16}>
                 <Header as="h3">Pilot Details</Header>
                 <Container>
-                  <Grid.Row centered style={{margin: '10px', padding: '10px'}}>
-                    {TODOS.map((item) => <ToDoItem item={item} />)}
+                  <Grid.Row centered style={{ margin: "8px", padding: "8px" }}>
+                    <Transition.Group
+                    as={List}
+                    duration={500}
+                    divided
+                    size='small'
+                    verticalAlign='middle'
+                    >
+                      {toDoList &&
+                        toDoList.map((item) => <ToDoItem key={item.id} item={item} />)}
+                    </Transition.Group>
                   </Grid.Row>
                 </Container>
               </Grid.Column>
@@ -84,34 +101,7 @@ const ToDoList = () => {
 
         <Grid.Column width={6}>
           <Header as="h3">Pilot Details</Header>
-          <Segment>
-            {/* <Form size="large">
-              <Form.Field name="name" width={16}>
-                <label>Name</label>
-                <input placeholder="Name" value="Natasha Kerensky" />
-              </Form.Field>
-              <Form.Field name="rank" width={16}>
-                <label>Rank</label>
-                <Dropdown fluid selection options={RANKS} value="Colonel" />
-              </Form.Field>
-              <Form.Field name="age" width={6}>
-                <label>Age</label>
-                <input placeholder="Age" value="52" />
-              </Form.Field>
-              <Form.Field name="gunnery" width={6}>
-                <label>Gunnery</label>
-                <input value="2" />
-              </Form.Field>
-              <Form.Field name="piloting" width={6}>
-                <label>Piloting</label>
-                <input value="3" />
-              </Form.Field>
-              <Form.Field name="mech" width={16}>
-                <label>Mech</label>
-                <Dropdown fluid selection options={MECHS} value="WHM-6R" />
-              </Form.Field>
-            </Form> */}
-          </Segment>
+          <Segment></Segment>
         </Grid.Column>
       </Grid>
     </Segment>

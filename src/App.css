@@ -4,6 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
 }
 
 
@@ -14,6 +15,7 @@
   background-color: white;
   display: flex;
   justify-content: center;
+
   align-items: center;
 }
 
@@ -22,16 +24,13 @@
 }
 .to-do-container {
    padding: 5px;
-   margin: 15px;
+   margin: 10px;
+
 }
 
 .to-do-content {
   display: flex;
   justify-content: center;
   align-content: center;
-  /* background-color: aqua; */
-}
 
-.to-do-content-conatiner{
-  flex
 }
