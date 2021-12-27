@@ -1,58 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import React, { useState } from 'react';
 import './App.css';
 
+import {
+  Header,
+  Container,
+  Menu,
+} from "semantic-ui-react";
+import ToDoList from './components/ToDoList';
+
 function App() {
+  const [activeItem, setActiveItem] = useState('board_1')
+  
+  
+  const handleItemClick = (e, { name }) => setActiveItem(name)
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+      <div className="app-header">
+        <Header as="h1">To Do List</Header>
+      </div>
+      <Container>
+          <Menu pointing secondary>
+          <Menu.Item
+            name='board_1'
+            active={activeItem === 'board_1'}
+            onClick={handleItemClick}
+          />
+          <Menu.Item
+            name='board_2'
+            active={activeItem === 'board_2'}
+            onClick={handleItemClick}
+          />
+          <Menu.Item
+            name='board_3'
+            active={activeItem === 'board_3'}
+            onClick={handleItemClick}
+          />
+          <Menu.Menu position='right'>
+            <Menu.Item
+              name='logout'
+              active={activeItem === 'logout'}
+              onClick={handleItemClick}
+            />
+          </Menu.Menu>
+        </Menu>
+        <ToDoList />
+      </Container>
+
+      
     </div>
   );
 }
 
 export default App;
+
+
