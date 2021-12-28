@@ -17,14 +17,11 @@ import {
   Segment,
   Header,
   Form,
-  Dropdown,
   Container,
-  Button,
   List,
   Transition,
-  Card,
-  Image,
-  Icon,
+  Divider,
+  Message,
 } from "semantic-ui-react";
 
 import { useDispatch } from "react-redux";
@@ -37,7 +34,6 @@ import { getToDoList } from "../features/toDoSlice";
 const ToDoList = () => {
   const [toDoEvent, setToDoEvent] = useState("");
   const dispatch = useDispatch();
-  const [visible,setVisible] = useState(false)
 
   const toDoList = useSelector(getToDoList);
 
@@ -69,7 +65,7 @@ const ToDoList = () => {
                 </Form>
               </Grid.Row>
               <Grid.Column>
-          {/* <Transition.Group animation={"fly right"} duration={600}>
+                {/* <Transition.Group animation={"fly right"} duration={600}>
             
               {visible && (<div> thuasFjdanfjkdnfkdanjkfdna kdnkfndskfnsdkafndksfjd</div> )}
               <Button
@@ -77,21 +73,41 @@ const ToDoList = () => {
             onClick={() => setVisible(!visible)}
           />
           </Transition.Group> */}
-        </Grid.Column>
-              <Grid.Column width={16}>
-                <Header as="h3">Pilot Details</Header>
+              </Grid.Column>
+              <Grid.Column width={12}>
+                <Header as="h4">Pending Tasks</Header>
                 <Container>
-                  <Grid.Row centered style={{ margin: "8px", padding: "8px" }}>
-                    <Transition.Group
-                    as={List}
-                    duration={500}
-                    divided
-                    size='small'
-                    verticalAlign='middle'
-                    >
-                      {toDoList &&
-                        toDoList.map((item) => <ToDoItem key={item.id} item={item} />)}
-                    </Transition.Group>
+                  <Grid.Row
+                    centered
+                    style={{ margin: "0px auto", padding: "10px" }}
+                  >
+                    <Segment>
+                      <Transition.Group
+                        as={List}
+                        duration={500}
+                        divided
+                        size="small"
+                        verticalAlign="middle"
+                      >
+                        {toDoList?.length > 0 ? (
+                          toDoList.map((item) => (
+                            <ToDoItem key={item.id} item={item} />
+                          ))
+                        ) : (
+                          // <Message icon="inbox">
+                          //   <Message.Header>No Tasks Left</Message.Header>
+                          //   <p>
+                          //     Add tasks and they should show up here!
+                          //   </p>
+                          // </Message>
+                          <Message
+                          positive
+                          header='Great! You have completed all your tasks.'
+                          content="Add more and they will show up here!"
+                        />
+                        )}
+                      </Transition.Group>
+                    </Segment>
                   </Grid.Row>
                 </Container>
               </Grid.Column>
@@ -100,7 +116,7 @@ const ToDoList = () => {
         </Grid.Column>
 
         <Grid.Column width={6}>
-          <Header as="h3">Pilot Details</Header>
+          <Header as="h4">Pilot Details</Header>
           <Segment></Segment>
         </Grid.Column>
       </Grid>

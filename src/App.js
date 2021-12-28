@@ -1,57 +1,22 @@
-import React, { useState } from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
+import Login from "./components/Login";
 
-import {
-  Header,
-  Container,
-  Menu,
-} from "semantic-ui-react";
-import ToDoList from './components/ToDoList';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Dashboard from "./components/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  const [activeItem, setActiveItem] = useState('board_1')
-  
-  
-  const handleItemClick = (e, { name }) => setActiveItem(name)
-
   return (
-    <div className="App">
-      <div className="app-header">
-        <Header as="h1">To Do List</Header>
-      </div>
-      <Container>
-          <Menu pointing secondary>
-          <Menu.Item
-            name='board_1'
-            active={activeItem === 'board_1'}
-            onClick={handleItemClick}
-          />
-          <Menu.Item
-            name='board_2'
-            active={activeItem === 'board_2'}
-            onClick={handleItemClick}
-          />
-          <Menu.Item
-            name='board_3'
-            active={activeItem === 'board_3'}
-            onClick={handleItemClick}
-          />
-          <Menu.Menu position='right'>
-            <Menu.Item
-              name='logout'
-              active={activeItem === 'logout'}
-              onClick={handleItemClick}
-            />
-          </Menu.Menu>
-        </Menu>
-        <ToDoList />
-      </Container>
-
-      
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/" element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
 export default App;
-
-
