@@ -1,44 +1,23 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+<h1> Todo App Development Assignment </h1>
+    <h3>  Tech Stack to develop the App </h3>
+          Frontend
+          • React & Redux
+          • CSS Library - Semantic UI React ( https://react.semantic-ui.com/ )
+          • Backend
+          • Sails MVC Framework developed atop the Node.js
+          • Database
+          • PostgreSQL ( PostgreSQL 9.6.* )
+    <h3> How to run locally </h3>
+    1. yarn install and also fill in .env values for REACT_APP_CLIENT_ID=737851489574-eatnhrrro2beln0rdl11tuc8j8jg29oq.apps.googleusercontent.com
+        and REACT_APP_CLIENT_SECRET=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.
+    2. cd server and run yarn install and setup your postgres database in datastores.js file in config folder.
+    3. Server runs on port 1337 and frontend runs on 3000.
+       
+    
+    
+    
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+![Screenshot from 2021-12-30 20-53-43](https://user-images.githubusercontent.com/55339354/147765139-3c41b9c3-f136-434e-89f7-63f35de4ce7f.png)
+![Screenshot from 2021-12-30 20-54-25](https://user-images.githubusercontent.com/55339354/147765144-92eef088-ea21-4504-a68d-56fde0702a80.png)
+![Screenshot from 2021-12-30 20-55-11](https://user-images.githubusercontent.com/55339354/147765150-80c77d4d-abb2-4983-87df-00b50da598c8.png)
+![Screenshot from 2021-12-30 20-55-19](https://user-images.githubusercontent.com/55339354/147765155-eca1a11d-e02b-4999-8e4f-58a08cf59a45.png)
