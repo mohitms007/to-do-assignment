@@ -1,17 +1,4 @@
-// import React from 'react'
-// import { Input } from 'semantic-ui-react'
-
-// export default function ToDoList() {
-//   return (
-//     <div>
-//       {/* To Do List */}
-
-//       <Input focus placeholder='Search...' />
-
-//     </div>
-//   )
-// }
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Grid,
   Segment,
@@ -24,23 +11,47 @@ import {
   Message,
 } from "semantic-ui-react";
 
-import { useDispatch } from "react-redux";
-import { saveToDo } from "../features/toDoSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {  getCompletedToDo, getToDoList, saveCompletedTodos, saveToDo, setToDos } from "../features/toDoSlice";
 import ToDoItem from "./ToDoItem";
 
-import { useSelector } from "react-redux";
-import { getToDoList } from "../features/toDoSlice";
 
-const ToDoList = () => {
+import CompletedTodos from "./CompletedTodos";
+import axios from "axios";
+
+const ToDoList = ({boardId, boards}) => {
   const [toDoEvent, setToDoEvent] = useState("");
   const dispatch = useDispatch();
-
+  const user = JSON.parse(localStorage.getItem("userInfo"));
   const toDoList = useSelector(getToDoList);
+  const completedToDoList = useSelector(getCompletedToDo);
 
-  const addToDo = () => {
-    dispatch(saveToDo({ item: toDoEvent, done: false, id: Date.now() }));
+  const addToDo = async() => {
+    try{
+      const createdToDo = await axios.post('http://localhost:1337/todos', {title: toDoEvent, boardId, userId: user.id, description: '', status: false})
+      dispatch(saveToDo(createdToDo.data));
+    }catch(e) {
+      console.log(e)
+    }
+   
     setToDoEvent("");
   };
+  
+
+  useEffect(() => {
+    getTodosByBoard()
+  }, [boardId, boards])
+
+
+  const getTodosByBoard = async() => {
+    
+    const selectedBoard = await boards.filter((board) => board.id === boardId)
+    const completedToDoList = await selectedBoard[0]?.todos.filter((todo) => todo.status === true);
+    const todosLeft = await selectedBoard[0]?.todos.filter((todo) => todo.status === false)
+    dispatch(setToDos(todosLeft))
+    dispatch(saveCompletedTodos(completedToDoList))
+    
+  }
 
   return (
     <Segment>
@@ -65,23 +76,17 @@ const ToDoList = () => {
                 </Form>
               </Grid.Row>
               <Grid.Column>
-                {/* <Transition.Group animation={"fly right"} duration={600}>
-            
-              {visible && (<div> thuasFjdanfjkdnfkdanjkfdna kdnkfndskfnsdkafndksfjd</div> )}
-              <Button
-            content={visible ? 'Unmount' : 'Mount'}
-            onClick={() => setVisible(!visible)}
-          />
-          </Transition.Group> */}
               </Grid.Column>
+              <Divider horizontal/>
               <Grid.Column width={12}>
-                <Header as="h4">Pending Tasks</Header>
+                
                 <Container>
                   <Grid.Row
                     centered
                     style={{ margin: "0px auto", padding: "10px" }}
                   >
                     <Segment>
+                    <Header as="h5" style={{backgroundColor: '#E4CDA7', padding: '4px 10px', borderRadius: '12px'}}>Pending Tasks</Header>
                       <Transition.Group
                         as={List}
                         duration={500}
@@ -91,7 +96,7 @@ const ToDoList = () => {
                       >
                         {toDoList?.length > 0 ? (
                           toDoList.map((item) => (
-                            <ToDoItem key={item.id} item={item} />
+                           <ToDoItem key={item.id} item={item} />
                           ))
                         ) : (
                           // <Message icon="inbox">
@@ -114,10 +119,37 @@ const ToDoList = () => {
             </Grid>
           </Container>
         </Grid.Column>
-
+                         
         <Grid.Column width={6}>
-          <Header as="h4">Pilot Details</Header>
-          <Segment></Segment>
+         
+          <Segment>
+          <Header as="h5" style={{backgroundColor: '#B1E693', padding: '2px 8px', borderRadius: '12px'}} >Completed To Dos</Header>
+                      <Transition.Group
+                        as={List}
+                        duration={500}
+                        divided
+                        size="small"
+                        verticalAlign="middle"
+                      >
+                        {completedToDoList?.length > 0 ? (
+                          completedToDoList.map((item) => (
+                            <CompletedTodos key={item.id} item={item} />
+                          ))
+                        ) : (
+                          // <Message icon="inbox">
+                          //   <Message.Header>No Tasks Left</Message.Header>
+                          //   <p>
+                          //     Add tasks and they should show up here!
+                          //   </p>
+                          // </Message>
+                          <Message
+                          positive
+                          header='Great! You have completed all your tasks.'
+                          content="Add more and they will show up here!"
+                        />
+                        )}
+                      </Transition.Group>
+                    </Segment>
         </Grid.Column>
       </Grid>
     </Segment>

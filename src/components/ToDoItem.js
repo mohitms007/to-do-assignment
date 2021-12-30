@@ -15,23 +15,35 @@ import { useDispatch } from "react-redux";
 import {
   setCheck,
   saveCompletedToDo,
-  toDoFinished,
 } from "../features/toDoSlice";
+import axios from "axios";
 
 const ToDoItem = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isItemChecked, setIsItemChecked] = useState(false);
   const dispatch = useDispatch();
 
-  const handleCheck = () => {
-    setIsItemChecked(!isItemChecked);
-    dispatch(setCheck(props.item.id));
-    dispatch(saveCompletedToDo(props.item));
+  const handleCheck = async () => {
+
+
+    try {
+      await axios.patch(`http://localhost:1337/todos/${props.item.id}`, {...props.item, status: true})
+      console.log(props.item)
+      setIsItemChecked(!isItemChecked);
+      dispatch(setCheck(props.item.id));
+      dispatch(saveCompletedToDo(props.item));
+    }catch(e) {
+      console.log(e)
+    }
+  
+    
   };
 
   const handleToggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+
+  const {title, description} = props.item 
 
   return (
     <div {...props}>
@@ -48,13 +60,9 @@ const ToDoItem = (props) => {
                   onClick={handleToggleModal}
                   className="to-do-content"
                 >
-                  <List.Header as="a">Daniel Louise</List.Header>
+                  <List.Header as="a">{title}</List.Header>
                   <List.Description>
-                    Last seen watching{" "}
-                    <a>
-                      <b>Arrested Development</b>
-                    </a>{" "}
-                    just now.
+                    {!description ? "Click here to add description" : description}
                   </List.Description>
                 </List.Content>
                 <span style={{ margin: "50px" }}>
