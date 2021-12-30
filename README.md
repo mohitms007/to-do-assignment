@@ -17,7 +17,7 @@
     
     
 
-![Screenshot from 2021-12-30 20-53-43](https://user-images.githubusercontent.com/55339354/147765139-3c41b9c3-f136-434e-89f7-63f35de4ce7f.png)
-![Screenshot from 2021-12-30 20-54-25](https://user-images.githubusercontent.com/55339354/147765144-92eef088-ea21-4504-a68d-56fde0702a80.png)
-![Screenshot from 2021-12-30 20-55-11](https://user-images.githubusercontent.com/55339354/147765150-80c77d4d-abb2-4983-87df-00b50da598c8.png)
-![Screenshot from 2021-12-30 20-55-19](https://user-images.githubusercontent.com/55339354/147765155-eca1a11d-e02b-4999-8e4f-58a08cf59a45.png)
+
+![Screenshot from 2021-12-30 21-08-25](https://user-images.githubusercontent.com/55339354/147766144-5edc7569-e82b-401e-882a-2652594e5cd9.png)
+![Screenshot from 2021-12-30 21-06-30](https://user-images.githubusercontent.com/55339354/147766145-1edf88b1-6d74-4194-94e6-fb91d30d2da3.png)
+![Screenshot from 2021-12-30 21-06-44](https://user-images.githubusercontent.com/55339354/147766147-05792dd5-9517-4df7-8aa8-ae599b268c10.png)
