@@ -21,6 +21,7 @@ import {
   saveCompletedToDo,
   deleteCompletedToDo,
   saveToDo,
+  updateCompletedToDo,
 } from "../features/toDoSlice";
 
 const CompletedTodos = (props) => {
@@ -51,22 +52,24 @@ const CompletedTodos = (props) => {
       );
 
       if (!status) {
-        dispatch(deleteCompletedToDo(false));
-        dispatch(saveToDo(updatedObj.data));    
+        dispatch(deleteCompletedToDo(props.item.id));
+        dispatch(saveToDo(updatedObj.data));
       } else {
-        
+        dispatch(updateCompletedToDo(updatedObj.data));
       }
-      setIsModalOpen(false)
+      setIsModalOpen(false);
     } catch (e) {
       console.log(e);
     }
-    setIsModalOpen(false)
+    setIsModalOpen(false);
   };
 
-  const onDeleteToDo = (e) => {};
+  const onDelete = async () => {
+    await axios.delete(`http://localhost:1337/todos/${props.item.id}`);
+    dispatch(deleteCompletedToDo(props.item.id));
+  };
 
-
-  const { title, description, status} = props.item
+  const { title, description, status } = props.item;
   return (
     <div {...props}>
       <Grid.Column className="completed-to-do-container">
@@ -83,11 +86,13 @@ const CompletedTodos = (props) => {
                   className="to-do-content"
                 >
                   <List.Header as="a">
-                    <h4>{title}</h4>
+                    <h5>{title}</h5>
                   </List.Header>
                   <List.Description>
                     <p>
-                     {description}
+                      {!description
+                        ? "Click here to add description"
+                        : description}
                     </p>
                   </List.Description>
                 </List.Content>
@@ -131,7 +136,13 @@ const CompletedTodos = (props) => {
                 />
               </Form.Field>
               <div style={{ float: "right", margin: "15px" }}>
-                <Button negative icon="delete" labelPosition="right">
+                <Button
+                  type="button"
+                  onClick={onDelete}
+                  negative
+                  icon="delete"
+                  labelPosition="right"
+                >
                   Delete <Icon name="delete" />
                 </Button>
                 <Button

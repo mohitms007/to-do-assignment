@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Container,
@@ -12,7 +13,12 @@ import {
   Label,
   Menu,
 } from "semantic-ui-react";
-import { addBoard, getBoards, saveBoards } from "../features/toDoSlice";
+import {
+  addBoard,
+  getBoards,
+  saveBoards,
+  deleteBoard,
+} from "../features/toDoSlice";
 import ToDoList from "./ToDoList";
 
 export default function Dashboard() {
@@ -25,6 +31,7 @@ export default function Dashboard() {
   const handleItemClick = (board) => setActiveItem(board.id);
   const user = JSON.parse(localStorage.getItem("userInfo"));
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -32,8 +39,11 @@ export default function Dashboard() {
   }, []);
 
   const fetchBoards = async () => {
+    const { id } = user;
     try {
-      const fetchedBoards = await axios.get("http://localhost:1337/boards");
+      const fetchedBoards = await axios.get(
+        `http://localhost:1337/boards/${id}`
+      );
 
       if (fetchedBoards?.data?.length > 0) {
         setActiveItem(fetchedBoards.data[0].id);
@@ -67,7 +77,27 @@ export default function Dashboard() {
     } catch (e) {
       console.log(e);
     }
+    setBoardName("");
   };
+
+  const handleLogout = () => {
+    setActiveItem("logout");
+    localStorage.clear();
+    navigate("/");
+  };
+
+  const handleDeleteBoard = async(id) => {
+  
+    try{
+      await axios.delete(`http://localhost:1337/boards/${id}`)
+      dispatch(deleteBoard(id))
+      console.log(boards[0].id)
+      setActiveItem(boards[0].id || boards[1].id || boards[2].id || 0)
+    }catch(e) {
+      console.log(e)
+    }
+
+  }
 
   return (
     <div className="App">
@@ -104,11 +134,17 @@ export default function Dashboard() {
               {boards.map((board) => {
                 return (
                   <Menu.Item
-                    name={board.name}
+                    // name={board.name}
                     key={board.id}
                     active={activeItem === board.id}
                     onClick={() => handleItemClick(board)}
-                  />
+                  >
+                    <span style={{ marginRight: "15px" }}>{board.name}</span>{" "}
+                    <Icon
+                      onClick={() => handleDeleteBoard(board.id)}
+                      name="delete"
+                    />
+                  </Menu.Item>
                 );
               })}
             </>
@@ -146,15 +182,16 @@ export default function Dashboard() {
               <Icon className="small" name="add" />
             </Button>
           )}
+
           <Menu.Menu position="right">
             <Menu.Item
               name="logout"
               active={activeItem === "logout"}
-              onClick={handleItemClick}
+              onClick={handleLogout}
             />
           </Menu.Menu>
         </Menu>
-        <ToDoList boardId={activeItem} boards={boards}/>
+        {boards.length > 0 && <ToDoList boardId={activeItem} boards={boards} />}
       </Container>
     </div>
   );

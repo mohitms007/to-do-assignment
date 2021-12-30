@@ -9,41 +9,87 @@ import {
   Transition,
   Segment,
   Divider,
+  Form,
+  Icon,
+  Button,
 } from "semantic-ui-react";
 
 import { useDispatch } from "react-redux";
 import {
   setCheck,
   saveCompletedToDo,
+  updateToDo,
+  deleteToDo,
 } from "../features/toDoSlice";
 import axios from "axios";
 
 const ToDoItem = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isItemChecked, setIsItemChecked] = useState(false);
+  const [isFormItemChecked, setIsFormItemChecked] = useState(0);
+
   const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("userInfo"));
 
   const handleCheck = async () => {
-
-
     try {
-      await axios.patch(`http://localhost:1337/todos/${props.item.id}`, {...props.item, status: true})
-      console.log(props.item)
+      await axios.patch(`http://localhost:1337/todos/${props.item.id}`, {
+        ...props.item,
+        status: true,
+      });
+      console.log(props.item);
       setIsItemChecked(!isItemChecked);
       dispatch(setCheck(props.item.id));
       dispatch(saveCompletedToDo(props.item));
-    }catch(e) {
-      console.log(e)
+    } catch (e) {
+      console.log(e);
     }
-  
-    
+  };
+
+  const handleFormCheck = () => {
+    setIsFormItemChecked(!isFormItemChecked);
   };
 
   const handleToggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const {title, description} = props.item 
+  const updateToDoItem = async (e) => {
+    e.preventDefault();
+    const formValues = Object.fromEntries(new FormData(e.target));
+    console.log(formValues);
+    const { title, description, status } = formValues;
+    try {
+      const updatedObj = await axios.patch(
+        `http://localhost:1337/todos/${props.item.id}`,
+        {
+          title,
+          description,
+          status: status === "true",
+          userId: user.id,
+          boardId: props.item.boardId,
+        }
+      );
+
+      if (status == "true") {
+        dispatch(setCheck(props.item.id));
+        dispatch(saveCompletedToDo(updatedObj.data));
+      } else {
+        dispatch(updateToDo(updatedObj.data));
+      }
+      setIsModalOpen(false);
+    } catch (e) {
+      console.log(e);
+    }
+    setIsModalOpen(false);
+  };
+
+  const onDelete = async () => {
+    await axios.delete(`http://localhost:1337/todos/${props.item.id}`);
+    dispatch(deleteToDo(props.item.id));
+  };
+
+  const { title, description } = props.item;
 
   return (
     <div {...props}>
@@ -62,7 +108,9 @@ const ToDoItem = (props) => {
                 >
                   <List.Header as="a">{title}</List.Header>
                   <List.Description>
-                    {!description ? "Click here to add description" : description}
+                    {!description
+                      ? "Click here to add description"
+                      : description}
                   </List.Description>
                 </List.Content>
                 <span style={{ margin: "50px" }}>
@@ -76,22 +124,57 @@ const ToDoItem = (props) => {
           onClose={() => setIsModalOpen(false)}
           onOpen={() => setIsModalOpen(true)}
           open={isModalOpen}
-          header="Reminder!"
-          content="Call Benjamin regarding the reports."
-          actions={[
-            {
-              key: "Snooze",
-              content: "Cancel",
-              onClick: () => setIsModalOpen(false),
-            },
-            {
-              key: "done",
-              content: "Done",
-              positive: true,
-              onClick: () => setIsModalOpen(false),
-            },
-          ]}
-        />
+          size="small"
+        >
+          <Modal.Header>Edit To Do Item</Modal.Header>
+          <Modal.Content>
+            <Form onSubmit={updateToDoItem}>
+              <Form.Field>
+                <label>Title</label>
+                <input
+                  name="title"
+                  defaultValue={props.item.title}
+                  placeholder="Put a suitable title"
+                />
+              </Form.Field>
+              <Form.TextArea
+                name="description"
+                defaultValue={props.item.description}
+                label="About"
+                placeholder="description"
+              />
+              <Form.Field>
+                <Checkbox
+                  name="status"
+                  value={isFormItemChecked}
+                  onChange={handleFormCheck}
+                  label="Completion Status of the Todo Item"
+                />
+              </Form.Field>
+              <div style={{ float: "right", margin: "15px" }}>
+                <Button
+                  type="button"
+                  onClick={onDelete}
+                  negative
+                  icon="delete"
+                  labelPosition="right"
+                >
+                  Delete <Icon name="delete" />
+                </Button>
+                <Button
+                  positive
+                  icon="save"
+                  type="submit"
+                  labelPosition="right"
+                >
+                  Save and Exit <Icon name="save" />
+                </Button>
+              </div>
+
+              {/* <Button type="submit">Submit</Button> */}
+            </Form>
+          </Modal.Content>
+        </Modal>
       </Grid.Column>
       <Divider />
     </div>

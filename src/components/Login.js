@@ -45,7 +45,7 @@ export default function Login() {
           "https://cdn.dribbble.com/users/45617/screenshots/7867139/media/b61183f8a0b2869a9258b5599b56cb50.png"
         }
       />
-      <div class="ui hidden divider"></div>
+      <div className="ui hidden divider"></div>
       <GoogleLogin
       className="login-btn"
         clientId={process.env.REACT_APP_CLIENT_ID}

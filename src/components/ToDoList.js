@@ -36,7 +36,7 @@ const ToDoList = ({boardId, boards}) => {
    
     setToDoEvent("");
   };
-  
+
 
   useEffect(() => {
     getTodosByBoard()
@@ -45,7 +45,7 @@ const ToDoList = ({boardId, boards}) => {
 
   const getTodosByBoard = async() => {
     
-    const selectedBoard = await boards.filter((board) => board.id === boardId)
+    const selectedBoard = await boards?.filter((board) => board.id === boardId)
     const completedToDoList = await selectedBoard[0]?.todos.filter((todo) => todo.status === true);
     const todosLeft = await selectedBoard[0]?.todos.filter((todo) => todo.status === false)
     dispatch(setToDos(todosLeft))

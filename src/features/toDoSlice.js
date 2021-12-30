@@ -21,7 +21,24 @@ const toDoSlice = createSlice({
     setCheck: (state,action) => {   
       return {...state, todoList: state.todoList.filter(item => action.payload !== item.id)}
     },
+
+    updateToDo: (state, action) => {
+      return {
+        ...state,
+        todoList: state.todoList.map(item => {
+          if(item.id === action.payload.id){
+            item = action.payload
+            return item
+          }else{
+            return item
+          }
+        })
+      }
+    },
     
+    deleteToDo: (state,action) => {
+      return {...state, todoList: state.todoList.filter(item => action.payload !== item.id)}
+    },
     saveCompletedToDo: (state,action) => {
       state.completedToDo.push({...action.payload, done:true})
     },
@@ -31,7 +48,21 @@ const toDoSlice = createSlice({
     },
 
     deleteCompletedToDo: (state,action) => {
-      return {...state, completedToDo: state.completedToDo.filter(item => action.payload !== item.status)}
+      return {...state, completedToDo: state.completedToDo.filter(item => action.payload !== item.id)}
+    },
+
+    updateCompletedToDo: (state,action) => {
+      return {
+        ...state,
+        completedToDo: state.completedToDo.map(item => {
+          if(item.id === action.payload.id){
+            item = action.payload
+            return item
+          }else{
+            return item
+          }
+        })
+      }
     },
 
     saveBoards: (state, action) => {
@@ -39,8 +70,14 @@ const toDoSlice = createSlice({
     },
 
     addBoard: (state,action) => {
-      state.boards.push(action.payload)
+      state.boards.push({...action.payload, todos: []})
+    },
+
+    deleteBoard: (state,action) => {
+      return {...state, boards: state.boards.filter(item => action.payload !== item.id)}
     }
+
+
   }
 });
 
@@ -53,9 +90,13 @@ export const {
   setToDos,
   saveCompletedTodos,
   setCheck,
+  updateToDo,
   saveCompletedToDo,
   deleteCompletedToDo,
+  updateCompletedToDo,
   saveBoards,
-  addBoard
+  addBoard,
+  deleteToDo,
+  deleteBoard
 } = toDoSlice.actions
 export default toDoSlice.reducer
